@@ -1,0 +1,13 @@
+.*
+logs
+test
+node_modules
+commitlint.config.js
+nodebb.bat
+renovate.json
+*.yml
+*.md
+Dockerfile
+docker-compose.yml
+docker-compose-local.yml
+README.md

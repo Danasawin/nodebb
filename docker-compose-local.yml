@@ -1,0 +1,29 @@
+services:
+  nodebb:
+    build: .
+    restart: unless-stopped
+    ports:
+      - '4567:4567' # comment this out if you don't want to expose NodeBB to the host, or change the first number to any port you want
+    volumes:
+      - ./data/nodebb/build:/usr/src/app/build
+      - ./data/nodebb/uploads:/usr/src/app/public/uploads
+      - ./data/nodebb/config:/opt/config
+      - ./install/docker/setup.json:/usr/src/app/setup.json
+
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: nodebb
+      POSTGRES_PASSWORD: nodebb
+      POSTGRES_DB: nodebb
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+
+  redis:
+    image: redis:8.4.0-alpine
+    restart: unless-stopped
+    command: ['redis-server', '--appendonly', 'yes', '--loglevel', 'warning']
+    # command: ["redis-server", "--save", "60", "1", "--loglevel", "warning"] # uncomment if you want to use snapshotting instead of AOF
+    volumes:
+      - ./data/redis:/data
